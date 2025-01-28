@@ -1,17 +1,15 @@
 strip = neopixel.create(DigitalPin.P0, 40, NeoPixelMode.RGBW)
 
-# 원하는 값으로 LED를 켜기 
-def set_leds(up_to):
+# 소리에 따라서 LED를 켜기
+def on_sound_lound():
+    sound_level = input.sound_level()
+    num_leds = min(max(sound_level // 1, 1), 40)
     strip.clear()
-    for i in range(up_to + 1):
+    for i in range(num_leds):
         strip.set_pixel_color(i, neopixel.colors(NeoPixelColors.RED))
     strip.show()
-
-def on_forever():
-    set_leds(10)
     basic.pause(1000)
-    set_leds(25)
-    basic.pause(1000)
+    strip.clear() # 이전에 동작했던 LED 초기화
+    strip.show()
 
-basic.forever(on_forever)
-
+input.on_sound(DetectedSound.LOUD, on_sound_lound)
